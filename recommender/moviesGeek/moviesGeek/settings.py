@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ DATA_DIR = BASE_DIR / 'data'
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ixo90*@(%koa6fv^z9a!bmq9492(7r*o&9+1uihcex!1no*@c#'
+SECRET_KEY = config('SECRET_KEY' , default = None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DJANGO_DEBUG' , default=0 , cast = bool)
 
 ALLOWED_HOSTS = []
 
@@ -39,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'profiles',
     'movies',
-    'ratings'
+    'ratings',
+    #external app
+    'django_celery_results',
+    'django_celery_beat' # scheduler
 ]
 
 MIDDLEWARE = [
@@ -53,6 +57,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'moviesGeek.urls'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+CELERY_BROKER_URL = config('CELERY_BROKER_REDIS_URL' , default = 'redis://localhost:6379')
+CELERY_RESULT_BACKEND = 'django-db'
 
 TEMPLATES = [
     {
