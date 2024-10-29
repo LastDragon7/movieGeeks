@@ -1,3 +1,13 @@
 from django.shortcuts import render
+from django.views import generic
+from .models import Movie
 
-# Create your views here.
+class MovieListView(generic.ListView):
+    template_name = 'movies/list.html'
+    paginate_by = 100
+    queryset = Movie.objects.all().order_by('-rating_avg')
+
+
+class MovieDetailView(generic.DetailView):
+    template_name = 'movies/detail.html'
+    queryset = Movie.objects.all()
