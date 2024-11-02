@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path , include
+from ratings import views as rating_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('movies/' , include('movies.urls')),
-    path('account/' , include('allauth.urls'))
+    path('account/' , include('allauth.urls')),
+    path('rate/movie/' , rating_views.rate_movie_view)
 ]

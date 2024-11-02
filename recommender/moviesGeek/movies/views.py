@@ -36,8 +36,8 @@ class MovieListView(generic.ListView):
         if user.is_authenticated:
             object_list = context['object_list']
             object_ids = [x.id for x in object_list]
-            my_ratings =  user.rating_set.filter(active = True).as_object_dict(object_ids = object_ids)
-            context['my_ratings'] = {f'{x.object_id}' : x.value for x in my_ratings}
+            my_ratings =  user.rating_set.movies().as_object_dict(object_ids=object_ids)
+            context['my_ratings'] = my_ratings
         return context
 
 class MovieDetailView(generic.DetailView):
@@ -49,8 +49,8 @@ class MovieDetailView(generic.DetailView):
         request = self.request
         user = request.user
         if user.is_authenticated:
-            objects = context['object']
-            object_ids = [objects.id]
-            my_ratings =  user.rating_set.filter(active = True).as_object_dict(object_ids = object_ids)
-            context['object'] = {f'{x.object_id}' : x.value for x in my_ratings}
+            object = context['object']
+            object_ids = [object.id]
+            my_ratings =  user.rating_set.movies().as_object_dict(object_ids=object_ids)
+            context['my_ratings'] = my_ratings
         return context
